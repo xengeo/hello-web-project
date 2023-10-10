@@ -72,11 +72,10 @@ def test_post_sort_more_names_returns_ok(web_client):
     assert response.data.decode('utf-8') == 'Joe,Julia,Kieran,Zoe'
 
 
-
+"""
 # POST /sort-names
 #    Parameters: none
 #    Expected response (404 Invalid Request):
-"""
 You didnt submit any names
 """
 def test_post_sort_with_no_names(web_client):
@@ -84,14 +83,65 @@ def test_post_sort_with_no_names(web_client):
     assert response.status_code == 400
     assert response.data.decode('utf-8') == 'You didnt submit any names'
 
-
-# POST /sort-names
-#    Parameters: 'JoeZoeJuliaKeiran'
-#    Expected response (404 Invalid Request):
 """
+POST /sort-names
+   Parameters: 'JoeZoeJuliaKeiran'
+   Expected response (400 Invalid Request):
 Please provide a comma-separated list of names
 """
 def test_post_sort_with_list_not_comma_sep(web_client):
     response = web_client.post('/sort-names', data={'names':'JoeZoeJuliaKeiran'})
     assert response.status_code == 400
     assert response.data.decode('utf-8') == 'Please provide a comma-separated list of names'
+
+"""
+Request:
+GET /names?add=Eddie
+   Parameters: add=Eddie (query parameter)
+Expected response (2OO OK):
+Julia, Alice, Karim, Eddie
+"""
+def test_get_add_eddie_name_added(web_client):
+    response = web_client.get('/names?add=Eddie')
+    assert response.status_code == 200
+    assert response.data.decode('utf-8') == 'Julia, Alice, Karim, Eddie'
+
+"""
+Request:
+GET /names?add=Xenia
+   Parameters: add=Xenia (query parameter)
+Expected response (2OO OK):
+Julia, Alice, Karim, Xenia
+"""
+def test_get_add_xenia_name_added(web_client):
+    response = web_client.get('/names?add=Xenia')
+    assert response.status_code == 200
+    assert response.data.decode('utf-8') == 'Julia, Alice, Karim, Xenia'
+
+"""
+Request:
+GET /names
+   Parameters: none (query parameter)
+Expected response (200 OK):
+Julia, Alice, Karim
+"""
+def test_get_add_no_name_added(web_client):
+    response = web_client.get('/names')
+    assert response.status_code == 200
+    assert response.data.decode('utf-8') == 'Julia, Alice, Karim'
+
+
+
+
+"""
+Request:
+        GET /names?add=Eddie,Leo
+Parameters: 
+        add=Eddie,Leo (query parameters)
+Expected response (2OO OK):
+        Alice, Eddie, Julia, Karim, Leo
+"""
+def test_get_add_two_names_added(web_client):
+    response = web_client.get('/names?add=Eddie,Leo')
+    assert response.status_code == 200
+    assert response.data.decode('utf-8') == 'Alice, Eddie, Julia, Karim, Leo'
