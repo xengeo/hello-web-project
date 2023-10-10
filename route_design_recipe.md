@@ -10,13 +10,22 @@ _Include the HTTP method, the path, and any query or body parameters._
 # EXAMPLE
 
 # Request:
-POST http://localhost:5001/sort-names
+GET /names?add=Eddie
 
-# With body parameters:
-names=Joe,Alice,Zoe,Julia,Kieran
+# This route should return a list of pre-defined names, plus the name given.
 
-# Expected response (sorted list of names):
-Alice,Joe,Julia,Kieran,Zoe
+# Expected response (2OO OK):
+Julia, Alice, Karim, Eddie
+
+
+For an extra challenge, add multiple names and sort them alphabetically
+
+# Request:
+GET /names?add=Eddie,Leo
+
+# Expected response (2OO OK):
+Alice, Eddie, Julia, Karim, Leo
+
 ```
 
 ## 2. Create Examples as Tests
@@ -30,19 +39,23 @@ _Include the status code and the response body._
 ```python
 # EXAMPLE
 
-# POST /sort-names
-#    Parameters:
-#       names=Joe,Alice,Zoe,Julia,Keiran  
-#    Expected response (200 OK):
+# Request:
+# GET /names?add=Eddie
+#    Parameters: add=Eddie (query parameter)
+# Expected response (2OO OK):
+# Julia, Alice, Karim, Eddie
 """
-Alice,Joe,Julia,Kieran,Zoe
+Julia, Alice, Karim, Eddie
 """
 
-# POST /sort-names
-#    Parameters: none
-#    Expected response (404 Bad Request):
+# Request:
+#         GET /names?add=Eddie,Leo
+# Parameters: 
+#         add=Eddie,Leo (query parameters)
+# Expected response (2OO OK):
+#         Alice, Eddie, Julia, Karim, Leo
 """
-Please provide a comma-separated list of names
+Alice, Eddie, Julia, Karim, Leo
 """
 
 ```
