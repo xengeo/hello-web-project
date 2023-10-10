@@ -7,6 +7,31 @@ app = Flask(__name__)
 # == Your Routes Here ==
 
 
+# Request:
+# GET /names?add=Eddie
+#    Parameters: add=Eddie (query parameter)
+# Expected response (2OO OK):
+# Julia, Alice, Karim, Eddie
+@app.route('/names', methods=['GET'])
+def names():
+
+    names = ['Julia', 'Alice', 'Karim']
+
+    if 'add' not in request.args: # not query params provided
+        return ', '.join(names) # return original names list
+    
+    name = request.args['add'] # get name(s) from query params
+    if ',' not in name: # is it a single name
+        names.append(name) # append to list
+    else:
+        names.extend(name.split(',')) # if >1 names in param, split > list, and extend og list
+        names.sort() #sort alphabetically
+    
+    return ', '.join(names) #join back into a string using comma space
+
+
+
+
 # POST /sort-names
 #    Body Parameters:
 #       names=Joe,Alice,Zoe,Julia,Keiran  
